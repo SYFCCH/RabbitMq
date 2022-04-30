@@ -1,5 +1,5 @@
 # RabbitMQ
-
+###### 本次版本使用3.9
 #四大核心概念
 ###### 生产者
 产生数据发送消息的程序是生产者
@@ -72,5 +72,46 @@ docker run -d -v /opt/rabbitmq/data:/var/lib/rabbitmq -p 5672:5672 -p 15672:1567
 ![img_7.png](img_7.png)  
 
 # java使用rabbitmq   
+1. 导入依赖     
+```
+<dependencies>
+<dependency>
+<groupId>com.rabbitmq</groupId>
+<artifactId>amqp-client</artifactId>
+<version>5.8.0</version>
+</dependency>
+<dependency>
+<groupId>commons-io</groupId>
+<artifactId>commons-io</artifactId>
+<version>2.6</version>
+</dependency>
+</dependencies>
+```
+2. 写生产者代码  
+![img_10.png](img_10.png)    
+信道连接队列，这个例子只是个简单的入门程序，不然信道和队列之间还有个交换机       
+![img_9.png](img_9.png)     
+参数解析:   
+``s: 队列名称 b: 是否持久化  b1: 是否排他  b2: 是否自动删除  DeclareOK:  队列参数``   
+
+![img_11.png](img_11.png)   
+参数解析:   
+``s:发送到哪个交换机 s1:路由的Key值是哪个 本次是队列的名称 basicProperties:其他参数信息 bytes:要发送的消息的二进制形式``
+
+完整代码如下:   
+![img_12.png](img_12.png)    
+
+![img_13.png](img_13.png)   
+![img_14.png](img_14.png)   
+4. 写消费者代码   
+前面的代码和生产者的代码一样   
+![img_15.png](img_15.png)    
+参数解析:
+``s: 消费的队列名字 b: 消费成功后是否自动应答 s1:消费者未成功消费的回调 Consumer: 消费者取消消费的回调``   
+   
+完整代码:   
+![img_16.png](img_16.png)   
+
+
 
 
