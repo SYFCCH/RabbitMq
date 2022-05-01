@@ -14,7 +14,7 @@
 消费与接收具有相似的含义。消费者大多时候是一个等待接收消息的程序。请注意生产者，消费 者和消息中间件很多时候并不在同一机器上。同一个应用程序既可以是生产者又是可以是消费者。
 
 
-# 工作原理    
+#1 工作原理    
 ![img.png](img.png)    
 
 * Broker
@@ -47,7 +47,7 @@ exchange 和 queue 之间的虚拟连接，binding 中可以包含 routing key�
 
 
 
-# 安装  
+#2 安装  
 ``
 docker pull rabbitmq:3
 ``
@@ -71,7 +71,7 @@ docker run -d -v /opt/rabbitmq/data:/var/lib/rabbitmq -p 5672:5672 -p 15672:1567
 ###### 设置用户权限   
 ![img_7.png](img_7.png)  
 
-# java使用rabbitmq   
+#3 java使用rabbitmq   
 1. 导入依赖     
 ```
 <dependencies>
@@ -120,7 +120,8 @@ docker run -d -v /opt/rabbitmq/data:/var/lib/rabbitmq -p 5672:5672 -p 15672:1567
 
  
 
-# 工作线程
+#4 工作线程
+## 4，1 轮询
 **多个工作线程线程接受消息采用轮询接收消息，他们之间是竞争关系**      
 **一个消息只能被处理一次，不可以处理多次**
 ![img_18.png](img_18.png)      
@@ -135,7 +136,40 @@ docker run -d -v /opt/rabbitmq/data:/var/lib/rabbitmq -p 5672:5672 -p 15672:1567
 ![img_24.png](img_24.png)   
 ![img_25.png](img_25.png)    
 ![img_26.png](img_26.png)     
-**说明了工作队列是轮询分发消息的**   
+###### 说明了工作队列是轮询分发消息的   
 
 
-# 消息应答
+## 4.2 消息应答
+为了保证消息在发送过程不丢失，rabbitmq引入消费应答机制，消费者在接收到消息并且处理该消息后，告诉rabbitmq它已经处理了，rabbitmq可以把该消息删除了  
+###### 消息应答的方法
+应答分为自动应答和手动应答，一般都是用手动应答   
+![img_29.png](img_29.png)  
+* Channel.basicAck(用于肯定确认，RabbitMQ已经知道该消息并且成功的处理消息，可以将其丢弃了)
+* Channel.basicNack(用于否定确认：否定确认就是不处理消息直接丢弃)     
+* Channel.basicReject(也是否定确认，比basickNack()少了一个参数，就是multipe)    
+* multipe就是是否批量处理，一般是不开启的，批量应答会导致前面的未应答的消息都会被确认收到消息应答   
+
+###### 消息自动重新入队  
+**消息在手动应答时是不丢失的，会放回队列中重新消费**   
+```发现有连接断开时，会将断开连接的消息重新入队，交给其他消费者处理信息```
+![img_28.png](img_28.png)     
+
+###### 消息手动应答代码 
+工作线程上(消费者)开启手动应答
+![img_32.png](img_32.png)    
+
+## 4.3 RabbitMQ持久化
+###### 队列持久化    
+```java
+channel.queueDeclare(队列名,true,false,false,null);
+第二个参数为true就是开启队列持久化  
+```
+![img_35.png](img_35.png)  
+![img_34.png](img_34.png)  
+###### 消息持久化   
+队列持久化但是消息不持久化的话也一样会消息丢失  
+![img_36.png](img_36.png)     
+
+
+
+
