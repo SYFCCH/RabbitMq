@@ -170,6 +170,17 @@ channel.queueDeclare(队列名,true,false,false,null);
 队列持久化但是消息不持久化的话也一样会消息丢失  
 ![img_36.png](img_36.png)     
 
-
-
+###### 不公平分发--也就是有能力者优先
+```java
+在消费者的代码下更改:   
+channel.basicQos(1);   
+设置参数，改为不公平分发，0的话是轮询分发，1的话是不公平分发   
+```
+![img_37.png](img_37.png)  
+###### 预取值——直接指定消费者可以拿到几条消息
+![img_38.png](img_38.png)
+```java
+channel.basicQos(预取值);  
+```
+这个预取值是指定了信道的堆积消息处理数，而不是只能消费多少条      
 
