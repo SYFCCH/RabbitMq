@@ -45,7 +45,8 @@ message 到达 broker 的第一站，根据分发规则，匹配查询表中的 
 
 exchange 和 queue 之间的虚拟连接，binding 中可以包含 routing key，Binding 信息被保 存到 exchange 中的查询表中，用于 message 的分发依据
 
-
+* RoutingKey  
+路由键，生产者将消息发送给交换器的时候，会发送一个RoutingKey，用来指定路由规则，这样交换器就知道把消息发送到哪个队列。路由键通常为一个“.”分割的字符串，例如“com.rabbitmq”。   
 
 #2 安装  
 ``
