@@ -50,8 +50,8 @@ exchange 和 queue 之间的虚拟连接，binding 中可以包含 routing key�
 
 #2 安装  
 ``
-docker pull rabbitmq:3
-``
+docker pull rabbitmq:3    
+``   
 ![img_2.png](img_2.png)   
 ```
 docker run -d -v /opt/rabbitmq/data:/var/lib/rabbitmq -p 5672:5672 -p 15672:15672 --name rabbitmq --restart=always --hostname myRabbit    rabbitmq:3
