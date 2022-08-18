@@ -17,7 +17,7 @@
 #1 工作原理    
 ![img.png](img.png)    
 
-* Broker
+* Broker 
 
 接收和分发消息的应用，RabbitMQ Server 就是 Message Broker
 
